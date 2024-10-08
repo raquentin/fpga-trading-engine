@@ -1,55 +1,29 @@
-<!-- omit in toc -->
-# punt-engine: high-freq trading on FPGAs via Haskell
-
-This project uses Clash (a semantic subset of Haskell) as a hardware description language to develop a high-frequency trading engine for FPGAs. 
-
-<!-- omit in toc -->
-# Table of Contents
-- [Development](#development)
+# 📉 punt-engine
+punt-engine is a hardware high frequency trading engine synthesized from Haskell and maintained by Trading @ Georgia Tech.
 
 ## Development
 
-### Dependencies
+### Building and testing
 
-We use [Nix](https://nixos.org/download/) to build and develop this project.
+Dependencies are managed by Nix. Download it and run `nix-shell` enter an environment and install them.
 
-### Build/Test
+In the shell, build with `nix-build`. The first build will take a while.
 
-Build the project with (first build will take eons):
-
-```bash
-nix-build
-```
-
-Verilog code will be available under the `result/share/verilog` directory.
-Modify the `hdl` variable in `default.nix` to configure whether to generate
-SystemVerilog or VHDL.
-
-Streamline development with a Nix shell:
-
-```
-nix-shell
-```
-
-Then, to run the tests defined in `tests/`:
+This project also defines unit and doc tests in `tests/`. Run them with:
 
 ```bash
 cabal run test-library
 cabal run doctests
 ```
 
-To compile the project to VHDL run:
+To compile a project to VHDL run:
 
 ```bash
-cabal run clash -- Example.Project --vhdl
+cabal run clash -- <Project>.Project --vhdl
 ```
 
 You can find the HDL files in `vhdl/`. The source can be found in `src/Example/Project.hs`.
 
-Clash offers a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) much like Haskell's `ghci`:
+Clash includes a repl much like Haskell's `ghci`. Run it with `cabal run clashi`.
 
-```
-cabal run clashi
-```
-
-Add custom dependencies or update nix via `niv`. See [niv on Hackage](https://hackage.haskell.org/package/niv) for more information.
+Add custom dependencies or update nix using [niv](https://hackage.haskell.org/package/niv).

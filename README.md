@@ -5,7 +5,6 @@ punt-engine is a hardware high frequency trading engine synthesized from Haskell
 
 ### Building and testing
 
-Dependencies are managed by Nix. Download it and run `nix-shell` enter an environment and install them.
 
 In the shell, build with `nix-build`. The first build will take a while.
 

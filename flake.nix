@@ -4,32 +4,27 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
         flake-utils.url = "github:numtide/flake-utils";
-        haskellNix.url = "github:input-output-hk/haskell.nix";
     };
 
-    outputs = { self, nixpkgs, flake-utils, haskellNix }:
+    outputs = { self, nixpkgs, flake-utils }:
         flake-utils.lib.eachDefaultSystem (system:
         let
-            overlays = [ haskellNix.overlay
-                (final: prev: {
-                    fixParser = 
-                        final.haskell-nix.project' {
-                            src = ./fix-parser/.;
-                            compiler-nix-name = "ghc966";
-                            shell.tools = {
-                                cabal = {};
-                                hlint = {};
-                                haskell-language-server = {};
-                            };
-                            shell.buildInputs = with pkgs; [
-                                nixpkgs-fmt
-                            ];
-                        };
-                })
+            pkgs = import nixpkgs { inherit system; };
+        in {
+            devShells.default = pkgs.mkShell {
+                    buildInputs = with pkgs; [
+                haskell.compiler.ghc98
+                cabal-install
+                hlint
+                haskell-language-server
+                nixpkgs-fmt
+                git
+
             ];
-            pkgs = import nixpkgs { inherit system overlays; inherit (haskellNix) config; };
-            flake = pkgs.fixParser.flake { };
-        in flake // {
-            packages.default = flake.packages."fixParser:exe:fixParser";
-        });
+
+            shellHook = ''
+                echo "Welcome to the punt-engine dev env."
+            '';
+                };
+            });
 }
